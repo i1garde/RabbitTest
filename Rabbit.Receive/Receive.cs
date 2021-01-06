@@ -9,6 +9,8 @@ namespace Rabbit.Receive
     {
         public static void Main()
         {
+            Console.WriteLine("This is a consumer's window(press 'enter' to close): ");
+
             var factory = new ConnectionFactory() { HostName = "localhost" };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
@@ -30,7 +32,6 @@ namespace Rabbit.Receive
                                      autoAck: true,
                                      consumer: consumer);
 
-                Console.WriteLine(" Press [enter] to exit.");
                 Console.ReadLine();
             }
         }

@@ -12,21 +12,32 @@ namespace Rabbit.Send
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.QueueDeclare(queue: "hello",
+                Console.WriteLine("This is a producer's window (enter '_0' to get out): ");
+                while (true)
+                {
+                    channel.QueueDeclare(queue: "hello",
                                      durable: false,
                                      exclusive: false,
                                      autoDelete: false,
                                      arguments: null);
 
-                string message = Console.ReadLine();
+                    Console.Write("Enter a message here: ");
 
-                var body = Encoding.UTF8.GetBytes(message);
+                    string message = Console.ReadLine();
 
-                channel.BasicPublish(exchange: "",
-                                     routingKey: "hello",
-                                     basicProperties: null,
-                                     body: body);
-                Console.WriteLine(" [x] Sent {0}", message);
+                    if(message == "_0")
+                    {
+                        break;
+                    }
+
+                    var body = Encoding.UTF8.GetBytes(message);
+
+                    channel.BasicPublish(exchange: "",
+                                         routingKey: "hello",
+                                         basicProperties: null,
+                                         body: body);
+                    Console.WriteLine(" [x] Sent {0}", message);
+                }
             }
 
             Console.WriteLine(" Press [enter] to exit.");
